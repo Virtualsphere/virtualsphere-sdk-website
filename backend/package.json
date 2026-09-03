@@ -1,0 +1,28 @@
+{
+  "name": "rfid-reader-backend",
+  "version": "1.0.0",
+  "description": "Backend API for RFID reader catalog (readers, SDK & demo downloads)",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "seed:admin": "node src/utils/seedAdmin.js",
+    "migrate:legacy-media": "node src/utils/migrateLegacyMedia.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.0",
+    "mysql2": "^3.11.0",
+    "sequelize": "^6.37.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
