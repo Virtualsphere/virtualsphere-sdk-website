@@ -1,3 +1,5 @@
+const slugify = require('./slugify');
+
 // Shapes a Reader model instance (with images/videos/files associations loaded)
 // into the JSON returned by the API, computing public URLs from disk paths.
 function serializeReader(reader) {
@@ -30,6 +32,7 @@ function serializeReader(reader) {
   return {
     id: r.id,
     name: r.name,
+    slug: slugify(r.name),
     category: r.category,
     shortDescription: r.shortDescription,
     description: r.description,

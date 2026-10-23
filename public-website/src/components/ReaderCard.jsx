@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 export default function ReaderCard({ reader }) {
   return (
     <Link
-      to={`/readers/${reader.id}`}
+      to={`/readers/${reader.slug || reader.id}`}
       className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:border-[#1A73E8]/30 hover:shadow-lg"
     >
       <div className="relative flex h-44 items-center justify-center bg-slate-50">

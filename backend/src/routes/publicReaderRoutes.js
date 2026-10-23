@@ -26,12 +26,13 @@ router.get('/', asyncHandler(readerController.listPublic));
  * /api/readers/{id}:
  *   get:
  *     tags: [Public - Readers]
- *     summary: Get a single published reader by id
+ *     summary: Get a single published reader by id or name slug
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         schema: { type: integer }
+ *         description: Numeric id (e.g. 6) or slug of the reader name (e.g. udt9r-rfid-smart-jewellery-tray-reader)
+ *         schema: { type: string }
  *     responses:
  *       200:
  *         description: Reader details

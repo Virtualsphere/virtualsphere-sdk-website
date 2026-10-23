@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import Carousel from '../components/Carousel.jsx';
@@ -40,13 +40,20 @@ function FileList({ title, files, primary }) {
 
 export default function ReaderDetailPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [reader, setReader] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
     fetchReader(id)
-      .then(setReader)
+      .then((data) => {
+        setReader(data);
+        // Old numeric links (/readers/6) get swapped for the name-based URL.
+        if (data.slug && data.slug !== id) {
+          navigate(`/readers/${data.slug}`, { replace: true });
+        }
+      })
       .catch(() => setError('Reader not found.'))
       .finally(() => setLoading(false));
   }, [id]);

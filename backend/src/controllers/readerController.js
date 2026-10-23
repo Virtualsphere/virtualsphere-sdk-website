@@ -3,6 +3,7 @@ const path = require('path');
 const { Reader, ReaderImage, ReaderVideo, ReaderFile } = require('../models');
 const parseFeatures = require('../utils/parseFeatures');
 const serializeReader = require('../utils/serializeReader');
+const slugify = require('../utils/slugify');
 const { UPLOADS_ROOT, SUBDIR_BY_FIELD } = require('../middleware/upload');
 
 const MEDIA_INCLUDE = [
@@ -94,11 +95,28 @@ async function listPublic(req, res) {
   res.json(readers.map(serializeReader));
 }
 
+// Accepts either a numeric id (legacy links like /readers/6) or a slug derived
+// from the reader's name (e.g. /readers/udt9r-rfid-smart-jewellery-tray-reader).
 async function getPublicById(req, res) {
-  const reader = await Reader.findOne({
-    where: { id: req.params.id, isPublished: true },
-    include: MEDIA_INCLUDE,
-  });
+  const param = req.params.id;
+  let reader;
+
+  if (/^\d+$/.test(param)) {
+    reader = await Reader.findOne({
+      where: { id: param, isPublished: true },
+      include: MEDIA_INCLUDE,
+    });
+  } else {
+    const wanted = slugify(param);
+    const candidates = await Reader.findAll({
+      where: { isPublished: true },
+      attributes: ['id', 'name'],
+      order: [['createdAt', 'ASC']],
+    });
+    const match = candidates.find((r) => slugify(r.name) === wanted);
+    if (match) reader = await Reader.findByPk(match.id, { include: MEDIA_INCLUDE });
+  }
+
   if (!reader) return res.status(404).json({ message: 'Reader not found' });
   res.json(serializeReader(reader));
 }
