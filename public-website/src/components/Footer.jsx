@@ -65,7 +65,7 @@ export default function Footer() {
           <h3 className="mb-4 text-base font-semibold">Get in Touch</h3>
           <ul className="space-y-2 text-gray-300">
             <li>
-              318-D, Nodia Sector 10, Block D
+              3rd floor, D-318, D Block,
               <br />
               Noida Sector 10, 201301
             </li>
