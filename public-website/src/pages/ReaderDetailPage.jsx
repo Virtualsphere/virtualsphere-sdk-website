@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import Carousel from '../components/Carousel.jsx';
+import VerticalSlideshow from '../components/VerticalSlideshow.jsx';
+import ImageLightbox from '../components/ImageLightbox.jsx';
 import { fetchReader } from '../api/readers.js';
 
 function DownloadIcon() {
@@ -44,6 +46,8 @@ export default function ReaderDetailPage() {
   const [reader, setReader] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [lightboxIndex, setLightboxIndex] = useState(null);
+  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
 
   useEffect(() => {
     fetchReader(id)
@@ -76,20 +80,30 @@ export default function ReaderDetailPage() {
         ) : (
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div className="flex flex-col gap-6 p-5 sm:flex-row sm:p-6">
-              <div className="h-48 w-full rounded-xl bg-slate-50 sm:h-56 sm:w-56 sm:shrink-0">
-                {reader.images.length > 0 ? (
-                  <Carousel
-                    items={reader.images}
-                    className="h-full w-full rounded-xl"
-                    renderItem={(img) => (
-                      <img src={img.url} alt={reader.name} className="h-48 w-full object-cover sm:h-56" />
-                    )}
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center">
-                    <span className="text-sm text-slate-400">No photo</span>
-                  </div>
-                )}
+              {/* On desktop the column stretches to the full height of the details; the absolute
+                  inner box keeps the slideshow from setting that height itself. */}
+              <div className="relative mx-auto h-[472px] w-56 shrink-0 sm:mx-0 sm:h-auto sm:self-stretch">
+                <div className="absolute inset-0">
+                  {reader.images.length > 0 ? (
+                    <VerticalSlideshow
+                      items={reader.images}
+                      onSelect={setLightboxIndex}
+                      className="h-full w-full"
+                      renderItem={(img) => (
+                        <img
+                          src={img.url}
+                          alt={reader.name}
+                          draggable={false}
+                          className="h-full w-full rounded-xl bg-slate-50 object-contain"
+                        />
+                      )}
+                    />
+                  ) : (
+                    <div className="flex h-56 w-full items-center justify-center rounded-xl bg-slate-50">
+                      <span className="text-sm text-slate-400">No photo</span>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="min-w-0 flex-1">
@@ -147,6 +161,9 @@ export default function ReaderDetailPage() {
           </div>
         )}
       </main>
+      {reader && (
+        <ImageLightbox images={reader.images} startIndex={lightboxIndex} alt={reader.name} onClose={closeLightbox} />
+      )}
       <Footer />
     </div>
   );
