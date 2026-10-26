@@ -80,10 +80,9 @@ export default function ReaderDetailPage() {
         ) : (
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div className="flex flex-col gap-6 p-5 sm:flex-row sm:p-6">
-              {/* On desktop the column stretches to the full height of the details; the absolute
-                  inner box keeps the slideshow from setting that height itself. */}
-              <div className="relative mx-auto h-[472px] w-56 shrink-0 sm:mx-0 sm:h-auto sm:self-stretch">
-                <div className="absolute inset-0">
+              {/* Height = half image + full image + half image (two 224px squares) plus two 12px gaps. */}
+              <div className="mx-auto h-[472px] w-56 shrink-0 sm:mx-0">
+                <div className="h-full">
                   {reader.images.length > 0 ? (
                     <VerticalSlideshow
                       items={reader.images}

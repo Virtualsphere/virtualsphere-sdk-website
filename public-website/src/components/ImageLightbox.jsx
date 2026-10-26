@@ -6,7 +6,7 @@ function ArrowButton({ direction, onClick }) {
       type="button"
       onClick={onClick}
       aria-label={direction === 'prev' ? 'Previous image' : 'Next image'}
-      className={`absolute top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 ${
+      className={`fixed top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 ${
         direction === 'prev' ? 'left-3 sm:left-6' : 'right-3 sm:right-6'
       }`}
     >
@@ -67,7 +67,7 @@ export default function ImageLightbox({ images, startIndex, alt, onClose }) {
         type="button"
         onClick={onClose}
         aria-label="Close"
-        className="absolute top-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+        className="fixed top-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
       >
         <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2">
           <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -78,7 +78,7 @@ export default function ImageLightbox({ images, startIndex, alt, onClose }) {
         <div onClick={(e) => e.stopPropagation()}>
           <ArrowButton direction="prev" onClick={() => go(-1)} />
           <ArrowButton direction="next" onClick={() => go(1)} />
-          <span className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-white/10 px-3 py-1 text-xs text-white">
+          <span className="fixed bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-white/10 px-3 py-1 text-xs text-white">
             {index + 1} / {images.length}
           </span>
         </div>
